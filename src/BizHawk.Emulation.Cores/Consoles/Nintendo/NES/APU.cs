@@ -1194,6 +1194,7 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 			// need to study what happens to apu and stuff..
 			sequencer_irq = false;
 			sequencer_irq_flag = false;
+			_WriteReg(0x4011, 0);
 			_WriteReg(0x4015, 0);
 
 			// for 4017, its as if the last value written gets rewritten
@@ -1222,6 +1223,8 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 			sequencer_counter = 2;
 
 			sequencer_check_1 = (sequencer_lut[0][1] - 1);
+
+			_WriteReg(0x4011, 0);
 
 			if (sequencer_mode == 0) { sequencer_check_2 = sequencer_lut[0][3] - 2; }
 			else { sequencer_check_2 = sequencer_lut[1][4] - 2; }
@@ -1473,6 +1476,7 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 		private int oldmix = 0;
 		private int cart_sound = 0;
 		private int old_cart_sound = 0;
+		private readonly float[] squareSumFactor = { 1.0f, 1.352455f, 1.336216f, 1.320361f, 1.304878f, 1.289755f, 1.274978f, 1.260535f, 1.246416f, 1.232610f, 1.219107f, 1.205896f, 1.192968f, 1.180314f, 1.167927f, 1.155796f, 1.143915f, 1.132276f, 1.120871f, 1.109693f, 1.098737f, 1.087994f, 1.077460f, 1.067127f, 1.056991f, 1.047046f, 1.037286f, 1.027706f, 1.018302f, 1.009068f, 1.0f };
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int EmitSample()
@@ -1490,7 +1494,7 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 				// more properly correct
 				float pulse_out = s_pulse0 == 0 && s_pulse1 == 0
 					? 0
-					: 95.88f / ((8128.0f / (s_pulse0 + s_pulse1)) + 100.0f);
+					: (s_pulse0 + s_pulse1) / 30.0f * squareSumFactor[pulse[0].env_output + pulse[1].env_output] * 0.258483f;
 
 				float tnd_out = s_tri == 0 && s_noise == 0 && s_dmc == 0
 					? 0
