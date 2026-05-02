@@ -35,9 +35,9 @@ namespace BizHawk.Emulation.Cores.Nintendo.Gameboy
 			public Triple Bit5to8Good()
 			{
 				Triple ret;
-				ret.r = (r * 255 + 15) / 31;
-				ret.g = (g * 255 + 15) / 31;
-				ret.b = (b * 255 + 15) / 31;
+				ret.r = (r << 3) + (r >> 2);
+				ret.g = (g << 3) + (g >> 2);
+				ret.b = (b << 3) + (b >> 2);
 				return ret;
 			}
 
