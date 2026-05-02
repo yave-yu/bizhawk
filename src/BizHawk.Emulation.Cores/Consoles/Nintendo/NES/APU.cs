@@ -1029,9 +1029,9 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 		public NoiseUnit noise;
 		public readonly DMCUnit dmc;
 
-		public bool linearMixer;
-		public bool notResetPhase;
-		public bool swapDutyCycles;
+		private bool linearMixer;
+		private bool notResetPhase;
+		private bool swapDutyCycles;
 
 		private bool irq_pending;
 		public int dmc_reload_countdown;
