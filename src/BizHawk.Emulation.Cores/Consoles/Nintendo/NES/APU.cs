@@ -10,9 +10,9 @@
 
 // TODO - refactor length counter to be separate component
 
-using System.Runtime.CompilerServices;
 using BizHawk.Common;
 using BizHawk.Common.NumberExtensions;
+using System.Runtime.CompilerServices;
 
 namespace BizHawk.Emulation.Cores.Nintendo.NES
 {
@@ -37,6 +37,10 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 			triangle = new TriangleUnit(this);
 			pulse[0] = new PulseUnit(this, 1);
 			pulse[1] = new PulseUnit(this, 0);
+
+			linearMixer = nes.Settings.LinearMixer;
+			notResetPhase = nes.Settings.NotResetPhase;
+			swapDutyCycles = nes.Settings.SwapDutyCycles;
 			if (old != null)
 			{
 				m_vol = old.m_vol;
@@ -129,7 +133,6 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 
 			public void WriteReg(int addr, byte val)
 			{
-				// Console.WriteLine("write pulse {0:X} {1:X}", addr, val);
 				switch (addr)
 				{
 					case 0:
@@ -137,6 +140,10 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 						env_constant = (val >> 4) & 1;
 						env_loop = (val >> 5) & 1;
 						duty_cnt = (val >> 6) & 3;
+						if(apu.swapDutyCycles && duty_cnt > 0 && duty_cnt < 3)
+						{
+							duty_cnt += duty_cnt == 1 ? 1 : -1;
+						}
 						break;
 					case 1:
 						sweep_shiftcount = val & 7;
@@ -148,7 +155,6 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 					case 2:
 						timer_reload_value = (timer_reload_value & 0x700) | val;
 						timer_raw_reload_value = timer_reload_value * 2 + 2;
-						// if (unit == 1) Console.WriteLine("{0} timer_reload_value: {1}", unit, timer_reload_value);
 						break;
 					case 3:
 						if (apu.len_clock_active)
@@ -164,14 +170,11 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 
 						timer_reload_value = (timer_reload_value & 0xFF) | ((val & 0x07) << 8);
 						timer_raw_reload_value = timer_reload_value * 2 + 2;
-						duty_step = 0;
+						if (!apu.notResetPhase) duty_step = 0;
 						env_start_flag = 1;
 
 						// allow the lenctr_en to kill the len_cnt
 						set_lenctr_en(lenctr_en);
-
-						// serves as a useful note-on diagnostic
-						// if(unit==1) Console.WriteLine("{0} timer_reload_value: {1}", unit, timer_reload_value);
 						break;
 				}
 			}
@@ -1026,6 +1029,10 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 		public NoiseUnit noise;
 		public readonly DMCUnit dmc;
 
+		public bool linearMixer;
+		public bool notResetPhase;
+		public bool swapDutyCycles;
+
 		private bool irq_pending;
 		public int dmc_reload_countdown;
 		private bool dmc_irq;
@@ -1334,7 +1341,6 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void RunOneFirst()
 		{
-
 			pulse[0].Run();
 			pulse[1].Run();
 			triangle.Run();
@@ -1476,7 +1482,7 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 		private int oldmix = 0;
 		private int cart_sound = 0;
 		private int old_cart_sound = 0;
-		private readonly float[] squareSumFactor = { 1.0f, 1.352455f, 1.336216f, 1.320361f, 1.304878f, 1.289755f, 1.274978f, 1.260535f, 1.246416f, 1.232610f, 1.219107f, 1.205896f, 1.192968f, 1.180314f, 1.167927f, 1.155796f, 1.143915f, 1.132276f, 1.120871f, 1.109693f, 1.098737f, 1.087994f, 1.077460f, 1.067127f, 1.056991f, 1.047046f, 1.037286f, 1.027706f, 1.018302f, 1.009068f, 1.0f };
+		private readonly float[] squareSumFactor = { 1.0f, 1.358399f, 1.347869f, 1.337501f, 1.327291f, 1.317235f, 1.307331f, 1.297575f, 1.287964f, 1.278493f, 1.269161f, 1.259964f, 1.250900f, 1.241965f, 1.233157f, 1.224472f, 1.215909f, 1.207466f, 1.199138f, 1.190925f, 1.182824f, 1.174832f, 1.166947f, 1.159167f, 1.151490f, 1.143915f, 1.136438f, 1.129059f, 1.121775f, 1.114584f, 1.107484f };
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int EmitSample()
@@ -1493,8 +1499,8 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 
 				// more properly correct
 				float pulse_out = s_pulse0 == 0 && s_pulse1 == 0
-					? 0
-					: (s_pulse0 + s_pulse1) / 30.0f * squareSumFactor[pulse[0].env_output + pulse[1].env_output] * 0.258483f;
+					? 0 : (linearMixer ? (s_pulse0 + s_pulse1) / 30.0f * squareSumFactor[pulse[0].env_output + pulse[1].env_output] * 0.258483f
+						: 95.88f / ((8128.0f / (s_pulse0 + s_pulse1)) + 64.0f));
 
 				float tnd_out = s_tri == 0 && s_noise == 0 && s_dmc == 0
 					? 0

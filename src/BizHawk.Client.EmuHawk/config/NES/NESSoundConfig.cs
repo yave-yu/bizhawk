@@ -23,6 +23,9 @@ namespace BizHawk.Client.EmuHawk
 			// get baseline maxes from a default config object
 			var d = new NES.NESSettings();
 			trackBar1.Minimum = d.APU_vol;
+			chkLinearMixer.Checked = d.LinearMixer;
+			chkNotResetPhase.Checked = d.NotResetPhase;
+			chkSwapDutyCycles.Checked = d.SwapDutyCycles;
 		}
 
 		private void NESSoundConfig_Load(object sender, EventArgs e)
@@ -31,6 +34,9 @@ namespace BizHawk.Client.EmuHawk
 			_settings = _oldSettings.Clone();
 
 			trackBar1.Value = _settings.APU_vol;
+			chkLinearMixer.Checked = _settings.LinearMixer;
+			chkNotResetPhase.Checked = _settings.NotResetPhase;
+			chkSwapDutyCycles.Checked = _settings.SwapDutyCycles;
 		}
 
 		private void Ok_Click(object sender, EventArgs e)
@@ -49,6 +55,24 @@ namespace BizHawk.Client.EmuHawk
 		{
 			label6.Text = trackBar1.Value.ToString();
 			_settings.APU_vol = trackBar1.Value;
+			NES.PutSettings(_settings);
+		}
+
+		private void chkNonlinearSquareMixer_CheckedChanged(object sender, EventArgs e)
+		{
+			_settings.LinearMixer = chkLinearMixer.Checked;
+			NES.PutSettings(_settings);
+		}
+
+		private void chkResetSquarePhase_CheckedChanged(object sender, EventArgs e)
+		{
+			_settings.NotResetPhase = chkNotResetPhase.Checked;
+			NES.PutSettings(_settings);
+		}
+
+		private void chkSwapDutyCycles_CheckedChanged(object sender, EventArgs e)
+		{
+			_settings.SwapDutyCycles = chkSwapDutyCycles.Checked;
 			NES.PutSettings(_settings);
 		}
 	}

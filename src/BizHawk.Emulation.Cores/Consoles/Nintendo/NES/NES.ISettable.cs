@@ -31,6 +31,9 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 			SetPalette(Settings.Palette);
 
 			apu.m_vol = Settings.APU_vol;
+			apu.linearMixer = Settings.LinearMixer;
+			apu.notResetPhase = Settings.NotResetPhase;
+			apu.swapDutyCycles = Settings.SwapDutyCycles;
 
 			return PutSettingsDirtyBits.None;
 		}
@@ -153,6 +156,9 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 			public byte[,] Palette;
 
 			public int APU_vol = 1;
+			public bool LinearMixer = false;
+			public bool NotResetPhase = false;
+			public bool SwapDutyCycles = false;
 
 			public NESSettings Clone()
 			{
