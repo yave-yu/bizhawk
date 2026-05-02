@@ -190,7 +190,7 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 
 			if (latchedoutput != tmp)
 			{
-				SendDiff((tmp - latchedoutput) * 3);
+				SendDiff((tmp - latchedoutput) * 5);
 				latchedoutput = tmp;
 			}
 		}

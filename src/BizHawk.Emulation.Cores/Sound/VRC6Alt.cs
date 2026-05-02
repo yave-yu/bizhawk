@@ -25,12 +25,12 @@ namespace BizHawk.Emulation.Cores.Components
 		// everything is flipped, though; but that's taken care of in the classes
 		private void PulseAddDiff(int value)
 		{
-			enqueuer(value * 360);
+			enqueuer(value << 9);
 		}
 		// saw ends up being not that loud because of differences in implementation
 		private void SawAddDiff(int value)
 		{
-			enqueuer(value * 360);
+			enqueuer(value * 384);
 		}
 
 		// state
