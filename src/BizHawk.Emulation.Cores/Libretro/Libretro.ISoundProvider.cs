@@ -4,7 +4,7 @@ namespace BizHawk.Emulation.Cores.Libretro
 {
 	public partial class LibretroHost : ISoundProvider
 	{
-		private const int OUT_SAMPLE_RATE = 44100;
+		private const int OUT_SAMPLE_RATE = 48000;
 
 		private BlipBuffer _blipL, _blipR;
 		private int _latchL, _latchR;

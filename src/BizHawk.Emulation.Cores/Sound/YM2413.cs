@@ -18,7 +18,7 @@ namespace BizHawk.Emulation.Cores.Components
 
 		public YM2413()
 		{
-			opll = OPLL_new(3579545, 44100, 0);
+			opll = OPLL_new(3579545, 48000, 0);
 		}
 
 		public enum ChipType
@@ -30,7 +30,7 @@ namespace BizHawk.Emulation.Cores.Components
 
 		public YM2413(ChipType type)
 		{
-			opll = OPLL_new(3579545, 44100, (int)type);
+			opll = OPLL_new(3579545, 48000, (int)type);
 		}
 
 		public void SyncState(Serializer ser)

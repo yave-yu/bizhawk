@@ -12,7 +12,7 @@ namespace BizHawk.Emulation.Cores.Intellivision
 
 		public PSG()
 		{
-			_blip.SetRates(894866 / 4.0, 44100);
+			_blip.SetRates(894866 / 4.0, 48000);
 		}
 
 		public ushort[] Register = new ushort[16];

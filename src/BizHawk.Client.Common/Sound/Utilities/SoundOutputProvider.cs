@@ -16,7 +16,7 @@ namespace BizHawk.Client.Common
 	// "hard" correction by generating silence or discarding samples.
 	public class SoundOutputProvider : IBufferedSoundProvider
 	{
-		private const int SampleRate = 44100;
+		private const int SampleRate = 48000;
 		private const int ChannelCount = 2;
 		private const int SoftCorrectionThresholdSamples = 5 * SampleRate / 1000;
 		private const int StartupMaxSamplesSurplusDeficit = 10 * SampleRate / 1000;

@@ -7,7 +7,7 @@ namespace BizHawk.Emulation.Cores.Arcades.MAME
 		public bool CanProvideAsync => false;
 		public SyncSoundMode SyncMode => SyncSoundMode.Sync;
 
-		private const int _sampleRate = 44100;
+		private const int _sampleRate = 48000;
 		private readonly short[] _sampleBuffer = new short[_sampleRate * 2]; // MAME internally guarentees refresh rate is never < 1Hz
 		private int _nsamps = 0;
 

@@ -26,12 +26,12 @@ namespace BizHawk.Emulation.Cores.Computers.SinclairSpectrum
 
 			ULADevice = new Screen128Plus2a(this);
 
-			BuzzerDevice = new OneBitBeeper(44100, ULADevice.FrameLength, 50, "SystemBuzzer");
+			BuzzerDevice = new OneBitBeeper(48000, ULADevice.FrameLength, 50, "SystemBuzzer");
 
-			TapeBuzzer = new OneBitBeeper(44100, ULADevice.FrameLength, 50, "TapeBuzzer");
+			TapeBuzzer = new OneBitBeeper(48000, ULADevice.FrameLength, 50, "TapeBuzzer");
 
 			AYDevice = new AY38912(this);
-			AYDevice.Init(44100, ULADevice.FrameLength);
+			AYDevice.Init(48000, ULADevice.FrameLength);
 
 			KeyboardDevice = new StandardKeyboard(this);
 

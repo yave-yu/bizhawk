@@ -57,7 +57,7 @@ namespace BizHawk.Emulation.Cores.Components
 		private readonly Queue<QueuedCommand> commands = new Queue<QueuedCommand>(256);
 		private long frameStartTime, frameStopTime;
 
-		private const int SampleRate = 44100;
+		private const int SampleRate = 48000;
 		private const int PsgBase = 3580000;
 		private static readonly byte[] LogScale = { 0, 0, 10, 10, 13, 13, 16, 16, 20, 20, 26, 26, 32, 32, 40, 40, 51, 51, 64, 64, 81, 81, 102, 102, 128, 128, 161, 161, 203, 203, 255, 255 };
 		private static readonly byte[] VolumeReductionTable = { 0x1F, 0x1D, 0x1B, 0x19, 0x17, 0x15, 0x13, 0x10, 0x0F, 0x0D, 0x0B, 0x09, 0x07, 0x05, 0x03, 0x00 };

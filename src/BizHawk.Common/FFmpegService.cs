@@ -146,7 +146,7 @@ namespace BizHawk.Common
 			string tempfile = Path.GetTempFileName();
 			try
 			{
-				var runResults = Run("-i", path, "-xerror", "-f", "wav", "-ar", "44100", "-ac", "2", "-acodec", "pcm_s16le", "-y", tempfile);
+				var runResults = Run("-i", path, "-xerror", "-f", "wav", "-ar", "48000", "-ac", "2", "-acodec", "pcm_s16le", "-y", tempfile);
 				if (runResults.ExitCode != 0)
 					throw new InvalidOperationException($"Failure running ffmpeg for audio decode. here was its output:\r\n{runResults.Text}");
 				byte[] ret = File.ReadAllBytes(tempfile);

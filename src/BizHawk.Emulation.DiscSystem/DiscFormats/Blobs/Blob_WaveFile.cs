@@ -66,7 +66,7 @@ namespace BizHawk.Emulation.DiscSystem
 					throw new Blob_WaveFile_Exception("Not a valid PCM WAVE file (only PCM is supported)");
 				}
 
-				if (fmt.channels != 2 || fmt.bitsPerSample != 16 || fmt.samplesPerSec != 44100)
+				if (fmt.channels != 2 || fmt.bitsPerSample != 16 || fmt.samplesPerSec != 48000)
 				{
 					throw new Blob_WaveFile_Exception("Not a CDA format WAVE file (conversion not yet supported)");
 				}

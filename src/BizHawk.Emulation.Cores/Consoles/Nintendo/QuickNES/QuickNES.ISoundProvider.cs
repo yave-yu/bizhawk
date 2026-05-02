@@ -38,7 +38,7 @@ namespace BizHawk.Emulation.Cores.Consoles.Nintendo.QuickNES
 
 		private void InitAudio()
 		{
-			LibQuickNES.ThrowStringError(QN.qn_set_sample_rate(Context, 44100));
+			LibQuickNES.ThrowStringError(QN.qn_set_sample_rate(Context, 48000));
 		}
 
 		private void DrainAudio()

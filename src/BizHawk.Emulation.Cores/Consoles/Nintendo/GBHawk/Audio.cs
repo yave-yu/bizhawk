@@ -1022,8 +1022,8 @@ namespace BizHawk.Emulation.Cores.Nintendo.GBHawk
 
 			sample = 0;
 
-			_blip_L.SetRates(4194304, 44100);
-			_blip_R.SetRates(4194304, 44100);
+			_blip_L.SetRates(4194304, 48000);
+			_blip_R.SetRates(4194304, 48000);
 		}
 
 		public void calculate_bias_gain_a()

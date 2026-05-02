@@ -123,7 +123,7 @@ namespace BizHawk.Emulation.Cores.PCEngine
 			Playback44khzTimer -= cycles;
 			if (Playback44khzTimer < 0)
 			{
-				Playback44khzTimer += 162.81f; // # of CPU cycles that translate to one 44100hz sample.
+				Playback44khzTimer += 162.81f; // # of CPU cycles that translate to one 48000hz sample.
 				AdpcmEmitSample();
 			}
 

@@ -51,7 +51,7 @@ namespace BizHawk.Emulation.Cores.Nintendo.Gameboy
 				IsAnySgb |= IsSgb(i);
 				_linkedConts[i] = new SaveController(Gameboy.CreateControllerDefinition(sgb: IsSgb(i), sub: false, tilt: false, rumble: false, remote: false));
 				_linkedBlips[i] = new BlipBuffer(1024);
-				_linkedBlips[i].SetRates(2097152 * 2, 44100);
+				_linkedBlips[i].SetRates(2097152 * 2, 48000);
 				_linkedOverflow[i] = 0;
 				_linkedLatches[i] = 0;
 				RomDetails += $"P{i + 1}:\r\n" + _linkedCores[i].RomDetails;

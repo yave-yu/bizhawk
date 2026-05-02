@@ -103,8 +103,8 @@ namespace BizHawk.Emulation.Cores.Sega.MasterSystem
 				disablePSG = true;
 			}
 
-			BlipL.SetRates(3579545, 44100);
-			BlipR.SetRates(3579545, 44100);
+			BlipL.SetRates(3579545, 48000);
+			BlipR.SetRates(3579545, 48000);
 
 			ser.Register<ISoundProvider>(this);
 

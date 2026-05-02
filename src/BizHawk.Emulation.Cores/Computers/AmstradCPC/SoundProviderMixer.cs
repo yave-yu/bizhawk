@@ -146,7 +146,7 @@ namespace BizHawk.Emulation.Cores.Computers.AmstradCPC
 
 			if (!sameCount)
 			{
-				// this is a bit hacky, really all ISoundProviders should be supplying 44100 with 882 samples per frame.
+				// this is a bit hacky, really all ISoundProviders should be supplying 48000 with 882 samples per frame.
 				// we will make sure this happens (no matter how it sounds)
 				if (SoundProviders.Count > 1)
 				{

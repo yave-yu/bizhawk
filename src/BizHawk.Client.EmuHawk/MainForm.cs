@@ -1200,7 +1200,7 @@ namespace BizHawk.Client.EmuHawk
 
 		private IVideoProvider _currentVideoProvider = NullVideo.Instance;
 
-		private ISoundProvider _currentSoundProvider = new NullSound(44100 / 60); // Reasonable default until we have a core instance
+		private ISoundProvider _currentSoundProvider = new NullSound(48000 / 60); // Reasonable default until we have a core instance
 
 		/// <remarks>don't use this, use <see cref="Config"/></remarks>
 		private readonly Func<Config> _getGlobalConfig;
@@ -3230,7 +3230,7 @@ namespace BizHawk.Client.EmuHawk
 				aw.SetVideoParameters(output.BufferWidth, output.BufferHeight);
 				if (dispose != null) dispose();
 
-				aw.SetAudioParameters(44100, 2, 16);
+				aw.SetAudioParameters(48000, 2, 16);
 
 				// select codec token
 				// do this before save dialog because ffmpeg won't know what extension it wants until it's been configured

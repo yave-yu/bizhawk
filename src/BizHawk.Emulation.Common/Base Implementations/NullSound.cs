@@ -34,7 +34,7 @@ namespace BizHawk.Emulation.Common
 		/// </summary>
 		public NullSound(long fpsNum, long fpsDen)
 		{
-			_spfNumerator = fpsDen * 44100;
+			_spfNumerator = fpsDen * 48000;
 			_spfDenominator = fpsNum;
 		}
 

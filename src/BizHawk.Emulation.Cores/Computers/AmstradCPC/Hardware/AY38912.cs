@@ -36,10 +36,10 @@ namespace BizHawk.Emulation.Cores.Computers.AmstradCPC
 		{
 			_machine = machine;
 
-			//_blipL.SetRates(1000000, 44100);
-			//_blipL.SetRates((_machine.GateArray.FrameLength * 50) / 4, 44100);
-			//_blipR.SetRates(1000000, 44100);
-			//_blipR.SetRates((_machine.GateArray.FrameLength * 50) / 4, 44100);
+			//_blipL.SetRates(1000000, 48000);
+			//_blipL.SetRates((_machine.GateArray.FrameLength * 50) / 4, 48000);
+			//_blipR.SetRates(1000000, 48000);
+			//_blipR.SetRates((_machine.GateArray.FrameLength * 50) / 4, 48000);
 		}
 
 		/// <summary>

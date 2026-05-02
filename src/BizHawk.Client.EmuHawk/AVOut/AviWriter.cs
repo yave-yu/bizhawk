@@ -263,7 +263,7 @@ namespace BizHawk.Client.EmuHawk
 				fps = 60,
 				fps_scale = 1,
 				a_bits = 16,
-				a_samplerate = 44100,
+				a_samplerate = 48000,
 				a_channels = 2,
 			};
 
@@ -615,7 +615,7 @@ namespace BizHawk.Client.EmuHawk
 				public int audio_bytes;
 				public int audio_samples;
 				public int audio_buffered_shorts;
-				public const int AUDIO_SEGMENT_SIZE = 44100 * 2;
+				public const int AUDIO_SEGMENT_SIZE = 48000 * 2;
 				public readonly short[] BufferedShorts = new short[AUDIO_SEGMENT_SIZE];
 			}
 

@@ -141,9 +141,9 @@ namespace BizHawk.Emulation.Cores.Nintendo.Gameboy
 		private void InitSound()
 		{
 			_blipL = new(1024);
-			_blipL.SetRates(TICKSPERSECOND, 44100);
+			_blipL.SetRates(TICKSPERSECOND, 48000);
 			_blipR = new(1024);
-			_blipR.SetRates(TICKSPERSECOND, 44100);
+			_blipR.SetRates(TICKSPERSECOND, 48000);
 		}
 
 		private void DisposeSound()

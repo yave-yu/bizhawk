@@ -28,7 +28,7 @@ namespace BizHawk.Emulation.Cores.Nintendo.N64
 			private set
 			{
 				_samplingRate = value;
-				Resampler.ChangeRate(_samplingRate, 44100);
+				Resampler.ChangeRate(_samplingRate, 48000);
 			}
 		}
 
@@ -47,7 +47,7 @@ namespace BizHawk.Emulation.Cores.Nintendo.N64
 			this.api = new mupen64plusAudioApi(core);
 
 			_samplingRate = api.GetSamplingRate();
-			Resampler = new(SamplingRate, 44100);
+			Resampler = new(SamplingRate, 48000);
 
 			coreAPI = core;
 			coreAPI.VInterrupt += DoAudioFrame;

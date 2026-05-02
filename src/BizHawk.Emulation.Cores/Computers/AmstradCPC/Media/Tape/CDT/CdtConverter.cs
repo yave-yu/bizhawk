@@ -566,7 +566,7 @@ namespace BizHawk.Emulation.Cores.Computers.AmstradCPC
 				This block is used for tapes which have some parts in a format such that the turbo loader block cannot be used.
 				This is not like a VOC file, since the information is much more compact. Each sample value is represented by one bit only
 				(0 for low, 1 for high) which means that the block will be at most 1/8 the size of the equivalent VOC.
-				The preferred sampling frequencies are 22050 or 44100 Hz (158 or 79 T-states/sample).
+				The preferred sampling frequencies are 22050 or 48000 Hz (158 or 79 T-states/sample).
 				Please, if you can, don't use other sampling frequencies.
 				Please use this block only if you cannot use any other block. */
 		private void ProcessBlockID15(byte[] data)

@@ -66,8 +66,8 @@ namespace BizHawk.Client.Common
 			["PSX"] = 502813668.0 / 8388608.0, // 59.940060138702392578125
 			["PSX_PAL"] = 419432765.0 / 8388608.0, // 50.00028192996978759765625
 #else // according to https://problemkaputt.de/psx-spx.htm#gputimings
-			["PSX"] = 44100.0 * 768 * 11 / 7 / 263 / 3413, // 59.292862562
-			["PSX_PAL"] = 44100.0 * 768 * 11 / 7 / 314 / 3406, // 49.7645593576
+			["PSX"] = 48000.0 * 768 * 11 / 7 / 263 / 3413, // 59.292862562
+			["PSX_PAL"] = 48000.0 * 768 * 11 / 7 / 314 / 3406, // 49.7645593576
 #endif
 
 			// according to https://github.com/TASEmulators/mednafen/blob/382ff1b8d293c9a862497706808cbb79b2cecbfb/src/ss/vdp2.cpp#L904-L907

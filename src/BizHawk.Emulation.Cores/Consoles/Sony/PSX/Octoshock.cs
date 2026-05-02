@@ -113,7 +113,7 @@ namespace BizHawk.Emulation.Cores.Sony.PSX
 			if (use_nocash_specs)
 			{
 				//see http://problemkaputt.de/psx-spx.htm
-				int CpuClock_n = 44100 * 768;
+				int CpuClock_n = 48000 * 768;
 				int CpuClock_d = 1;
 				int VidClock_n = CpuClock_n * 11;
 				int VidClock_d = CpuClock_d * 7;

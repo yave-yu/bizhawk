@@ -1444,7 +1444,7 @@ namespace BizHawk.Emulation.Cores.Consoles.O2Hawk
 
 			shift_cnt = 0;
 
-			_blip_C.SetRates(1792000, 44100);
+			_blip_C.SetRates(1792000, 48000);
 		}
 
 		public void AudioSyncState(Serializer ser)

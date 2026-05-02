@@ -25,8 +25,8 @@ namespace BizHawk.Emulation.Cores.Nintendo.SNES
 
 		private void InitAudio()
 		{
-			_blipL.SetRates(32040.5, 44100);
-			_blipR.SetRates(32040.5, 44100);
+			_blipL.SetRates(32040.5, 48000);
+			_blipR.SetRates(32040.5, 48000);
 		}
 
 		private void snes_audio_sample(short left, short right)

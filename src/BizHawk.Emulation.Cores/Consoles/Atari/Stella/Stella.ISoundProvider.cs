@@ -95,9 +95,9 @@ namespace BizHawk.Emulation.Cores.Atari.Stella
 			};
 
 			_blipL = new(2048);
-			_blipL.SetRates(sampleRate, 44100);
+			_blipL.SetRates(sampleRate, 48000);
 			_blipR = new(2048);
-			_blipR.SetRates(sampleRate, 44100);
+			_blipR.SetRates(sampleRate, 48000);
 		}
 
 		private void DisposeSound()

@@ -7,7 +7,7 @@ namespace BizHawk.Emulation.Cores.Consoles.ChannelF
 	/// </summary>
 	public partial class ChannelF : ISoundProvider
 	{
-		private const double SAMPLE_RATE = 44100;
+		private const double SAMPLE_RATE = 48000;
 		private const double DECAY = 0.998;
 		private const int RAMP_UP_TIME = 1;
 

@@ -117,7 +117,7 @@ namespace BizHawk.Client.EmuHawk
 			if (result is null) return;
 
 			using var avw = new AviWriter(this);
-			avw.SetAudioParameters(44100, 2, 16); // hacky
+			avw.SetAudioParameters(48000, 2, 16); // hacky
 			avw.SetMovieParameters(60, 1); // hacky
 			avw.SetVideoParameters(width, height);
 			var token = avw.AcquireVideoCodecToken(_config);

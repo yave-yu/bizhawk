@@ -11,7 +11,7 @@ namespace BizHawk.Client.EmuHawk
 	/// <remarks>TODO rename to <c>HostAudioManager</c></remarks>
 	public class Sound : IHostAudioManager, IDisposable
 	{
-		public int SampleRate { get; } = 44100;
+		public int SampleRate { get; } = 48000;
 
 		public int BytesPerSample { get; } = 2;
 

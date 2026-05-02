@@ -19,7 +19,7 @@ namespace BizHawk.Emulation.Cores.Sound
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		/// <param name="blipSampleRate">The sample rate to pass to blipbuffer (this should be 44100 for ISoundProvider)</param>
+		/// <param name="blipSampleRate">The sample rate to pass to blipbuffer (this should be 48000 for ISoundProvider)</param>
 		/// <param name="clocksPerFrame">The number of (usually CPU) clocked cycles in one frame</param>
 		/// <param name="framesPerSecond">The number of frames per second (usually either 60 or 50)</param>
 		/// <param name="beeperId">Unique name for this instance (needed for serialization as some cores have more than one active instance of the beeper)</param>

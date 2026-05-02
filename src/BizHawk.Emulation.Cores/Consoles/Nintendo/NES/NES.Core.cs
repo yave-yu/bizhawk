@@ -222,7 +222,7 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 					throw new Exception("Unknown displaytype!");
 			}
 
-			blip.SetRates((uint)cpuclockrate, 44100);
+			blip.SetRates((uint)cpuclockrate, 48000);
 
 			BoardSystemHardReset();
 

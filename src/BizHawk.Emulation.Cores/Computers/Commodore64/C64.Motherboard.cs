@@ -83,16 +83,16 @@ namespace BizHawk.Emulation.Cores.Computers.Commodore64
 			switch (sidType)
 			{
 				case C64.SidType.OldR2:
-					Sid = Chip6581R2.Create(44100, clockNum, clockDen);
+					Sid = Chip6581R2.Create(48000, clockNum, clockDen);
 					break;
 				case C64.SidType.OldR3:
-					Sid = Chip6581R3.Create(44100, clockNum, clockDen);
+					Sid = Chip6581R3.Create(48000, clockNum, clockDen);
 					break;
 				case C64.SidType.OldR4AR:
-					Sid = Chip6581R4AR.Create(44100, clockNum, clockDen);
+					Sid = Chip6581R4AR.Create(48000, clockNum, clockDen);
 					break;
 				case C64.SidType.NewR5:
-					Sid = Chip8580R5.Create(44100, clockNum, clockDen);
+					Sid = Chip8580R5.Create(48000, clockNum, clockDen);
 					break;
 			}
 

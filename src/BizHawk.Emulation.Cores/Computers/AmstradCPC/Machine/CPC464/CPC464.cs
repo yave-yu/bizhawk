@@ -27,11 +27,11 @@ namespace BizHawk.Emulation.Cores.Computers.AmstradCPC
 			PAL = new PAL16L8(this);
 
 			TapeBuzzer = new Beeper(this);
-			TapeBuzzer.Init(44100, FrameLength);
+			TapeBuzzer.Init(48000, FrameLength);
 
 			//AYDevice = new PSG(this, PSG.ay38910_type_t.AY38910_TYPE_8912, GateArray.PSGClockSpeed, 882 * 50);
 			AYDevice = new AY38912(this);
-			AYDevice.Init(44100, FrameLength);
+			AYDevice.Init(48000, FrameLength);
 
 			KeyboardDevice = new StandardKeyboard(this);
 

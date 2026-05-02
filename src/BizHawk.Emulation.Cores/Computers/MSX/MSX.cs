@@ -139,7 +139,7 @@ namespace BizHawk.Emulation.Cores.Computers.MSX
 			LibMSX.MSX_load_bios(MSX_Pntr, Bios, Basic);
 			LibMSX.MSX_load(MSX_Pntr, RomData, (uint)RomData.Length, mapper_1, RomData2, (uint)RomData2.Length, 0);
 
-			blip.SetRates(3579545, 44100);
+			blip.SetRates(3579545, 48000);
 
 			(ServiceProvider as BasicServiceProvider).Register<ISoundProvider>(this);
 

@@ -92,7 +92,7 @@ namespace BizHawk.Emulation.Cores.Atari.A7800Hawk
 				ReadMemory = ReadMemory
 			};
 
-			_blip.SetRates(1789773, 44100);
+			_blip.SetRates(1789773, 48000);
 
 			_syncSettings = syncSettings ?? new A7800SyncSettings();
 			_controllerDeck = new A7800HawkControllerDeck(_syncSettings.Port1, _syncSettings.Port2);

@@ -32,8 +32,8 @@ namespace BizHawk.Emulation.Cores.Libretro
 			if (bridge.LibretroBridge_GetRetroTimingInfo(cbHandler, ref av_info.timing))
 			{
 				VsyncNumerator = checked((int)(10000000 * av_info.timing.fps));
-				_blipL.SetRates(av_info.timing.sample_rate, 44100);
-				_blipR.SetRates(av_info.timing.sample_rate, 44100);
+				_blipL.SetRates(av_info.timing.sample_rate, 48000);
+				_blipR.SetRates(av_info.timing.sample_rate, 48000);
 			}
 
 			if (render)

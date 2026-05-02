@@ -325,7 +325,7 @@ namespace BizHawk.Emulation.Cores.Consoles.Vectrex
 			}
 			sync_psg_state();
 
-			_blip.SetRates(1500000, 44100);
+			_blip.SetRates(1500000, 48000);
 		}
 
 		public bool CanProvideAsync => false;

@@ -9,7 +9,7 @@ namespace BizHawk.Emulation.Cores.Components
 	/// ISoundProvider mixer that generates a single ISoundProvider output from multiple ISoundProvider sources
 	/// Currently only supports sync (not async)
 	///
-	/// Bizhawk expects ISoundProviders to output at 44100KHz, so this is what SyncSoundMixer does. Therefore, try to make
+	/// Bizhawk expects ISoundProviders to output at 48000KHz, so this is what SyncSoundMixer does. Therefore, try to make
 	/// sure that your child ISoundProviders also do this I guess.
 	///
 	/// This is currently used in the ZX Spectrum and CPC cores but others may find it useful in future
@@ -55,8 +55,8 @@ namespace BizHawk.Emulation.Cores.Components
 		/// to get as close to this nsamp value as possible. Otherwise the number of samples will
 		/// be based on the highest nsamp out of all the child providers for that specific frame
 		/// Useful examples:
-		///		882 - 44100KHz - 50Hz
-		///		735 - 44100Khz - 60Hz
+		///		882 - 48000KHz - 50Hz
+		///		735 - 48000Khz - 60Hz
 		/// </summary>
 		private readonly int? _targetSampleCount;
 
