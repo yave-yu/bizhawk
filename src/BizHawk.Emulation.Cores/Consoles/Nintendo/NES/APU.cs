@@ -1482,7 +1482,7 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 		private int oldmix = 0;
 		private int cart_sound = 0;
 		private int old_cart_sound = 0;
-		private readonly float[] squareSumFactor = { 1.0f, 1.358399f, 1.347869f, 1.337501f, 1.327291f, 1.317235f, 1.307331f, 1.297575f, 1.287964f, 1.278493f, 1.269161f, 1.259964f, 1.250900f, 1.241965f, 1.233157f, 1.224472f, 1.215909f, 1.207466f, 1.199138f, 1.190925f, 1.182824f, 1.174832f, 1.166947f, 1.159167f, 1.151490f, 1.143915f, 1.136438f, 1.129059f, 1.121775f, 1.114584f, 1.107484f };
+		private readonly float[] squareSumFactor = { 1.0f, 1.356577f, 1.344287f, 1.332217f, 1.320361f, 1.308715f, 1.297273f, 1.286029f, 1.274977f, 1.264115f, 1.253436f, 1.242936f, 1.232610f, 1.222455f, 1.212465f, 1.202638f, 1.192968f, 1.183453f, 1.174088f, 1.164870f, 1.155796f, 1.146862f, 1.138065f, 1.129403f, 1.120871f, 1.112467f, 1.104188f, 1.096031f, 1.087994f, 1.080074f, 1.072269f };
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public int EmitSample()
@@ -1500,7 +1500,7 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 				// more properly correct
 				float pulse_out = s_pulse0 == 0 && s_pulse1 == 0
 					? 0 : (linearMixer ? (s_pulse0 + s_pulse1) / 30.0f * squareSumFactor[pulse[0].env_output + pulse[1].env_output] * 0.258483f
-						: 95.88f / ((8128.0f / (s_pulse0 + s_pulse1)) + 64.0f));
+						: 95.88f / ((8128.0f / (s_pulse0 + s_pulse1)) + 75.0f));
 
 				float tnd_out = s_tri == 0 && s_noise == 0 && s_dmc == 0
 					? 0
