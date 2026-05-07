@@ -216,10 +216,6 @@ namespace BizHawk.Emulation.Cores.Consoles.Nintendo.Ares64
 				}
 				else if (controllerSettings[i] != LibAres64.ControllerType.Unplugged)
 				{
-					ret.BoolButtons.Add($"P{i + 1} A Up");
-					ret.BoolButtons.Add($"P{i + 1} A Down");
-					ret.BoolButtons.Add($"P{i + 1} A Left");
-					ret.BoolButtons.Add($"P{i + 1} A Right");
 					ret.BoolButtons.Add($"P{i + 1} DPad U");
 					ret.BoolButtons.Add($"P{i + 1} DPad D");
 					ret.BoolButtons.Add($"P{i + 1} DPad L");
@@ -234,7 +230,7 @@ namespace BizHawk.Emulation.Cores.Consoles.Nintendo.Ares64
 					ret.BoolButtons.Add($"P{i + 1} C Right");
 					ret.BoolButtons.Add($"P{i + 1} L");
 					ret.BoolButtons.Add($"P{i + 1} R");
-					ret.AddXYPair($"P{i + 1} {{0}} Axis", AxisPairOrientation.RightAndUp, (-128).RangeTo(127), 0, new CircularAxisConstraint("Natural Circle", $"P{i + 1} Y Axis", 127.0f));
+					ret.AddXYPair($"P{i + 1} {{0}} Axis", AxisPairOrientation.RightAndUp, (-128).RangeTo(127), 0, new CircularAxisConstraint("Natural Circle", $"P{i + 1} Y Axis", 91.0f));
 					if (controllerSettings[i] == LibAres64.ControllerType.Rumblepak)
 					{
 						ret.HapticsChannels.Add($"P{i + 1} Rumble Pak");
