@@ -55,7 +55,7 @@ namespace BizHawk.Client.EmuHawk
 			appendAllFilesEntry: false,
 			new FilesystemFilter("Libretro Cores", extensions: [ (OSTailoredCode.IsUnixHost ? "so" : "dll") ]));
 
-		private const int WINDOW_SCALE_MAX = 10;
+		private const int WINDOW_SCALE_MAX = 12;
 
 		private readonly ToolStripMenuItemEx DOSSubMenu = new() { Text = "&DOS" };
 
