@@ -36,13 +36,14 @@
             this.chkLinearMixer = new System.Windows.Forms.CheckBox();
             this.chkNotResetPhase = new System.Windows.Forms.CheckBox();
             this.chkSwapDutyCycles = new System.Windows.Forms.CheckBox();
+            this.chkReverseBit = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
             // OK
             // 
             this.OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.OK.Location = new System.Drawing.Point(41, 121);
+            this.OK.Location = new System.Drawing.Point(41, 144);
             this.OK.Name = "OK";
             this.OK.Size = new System.Drawing.Size(75, 21);
             this.OK.TabIndex = 0;
@@ -54,7 +55,7 @@
             // 
             this.Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.Cancel.Location = new System.Drawing.Point(122, 121);
+            this.Cancel.Location = new System.Drawing.Point(122, 144);
             this.Cancel.Name = "Cancel";
             this.Cancel.Size = new System.Drawing.Size(75, 21);
             this.Cancel.TabIndex = 1;
@@ -90,9 +91,9 @@
             this.chkLinearMixer.AutoSize = true;
             this.chkLinearMixer.Location = new System.Drawing.Point(12, 56);
             this.chkLinearMixer.Name = "chkLinearMixer";
-            this.chkLinearMixer.Size = new System.Drawing.Size(96, 16);
+            this.chkLinearMixer.Size = new System.Drawing.Size(138, 16);
             this.chkLinearMixer.TabIndex = 3;
-            this.chkLinearMixer.Text = "Linear mixer";
+            this.chkLinearMixer.Text = "Linear square mixer";
             this.chkLinearMixer.UseVisualStyleBackColor = true;
             this.chkLinearMixer.CheckedChanged += new System.EventHandler(this.chkNonlinearSquareMixer_CheckedChanged);
             // 
@@ -101,9 +102,9 @@
             this.chkNotResetPhase.AutoSize = true;
             this.chkNotResetPhase.Location = new System.Drawing.Point(12, 77);
             this.chkNotResetPhase.Name = "chkNotResetPhase";
-            this.chkNotResetPhase.Size = new System.Drawing.Size(114, 16);
+            this.chkNotResetPhase.Size = new System.Drawing.Size(156, 16);
             this.chkNotResetPhase.TabIndex = 4;
-            this.chkNotResetPhase.Text = "Not reset phase";
+            this.chkNotResetPhase.Text = "Not reset square phase";
             this.chkNotResetPhase.UseVisualStyleBackColor = true;
             this.chkNotResetPhase.CheckedChanged += new System.EventHandler(this.chkResetSquarePhase_CheckedChanged);
             // 
@@ -118,13 +119,25 @@
             this.chkSwapDutyCycles.UseVisualStyleBackColor = true;
             this.chkSwapDutyCycles.CheckedChanged += new System.EventHandler(this.chkSwapDutyCycles_CheckedChanged);
             // 
+            // chkReverseBit
+            // 
+            this.chkReverseBit.AutoSize = true;
+            this.chkReverseBit.Location = new System.Drawing.Point(12, 119);
+            this.chkReverseBit.Name = "chkReverseBit";
+            this.chkReverseBit.Size = new System.Drawing.Size(120, 16);
+            this.chkReverseBit.TabIndex = 10;
+            this.chkReverseBit.Text = "Reverse DPCM bit";
+            this.chkReverseBit.UseVisualStyleBackColor = true;
+            this.chkReverseBit.CheckedChanged += new System.EventHandler(this.chkReverseBit_CheckedChanged);
+            // 
             // NESSoundConfig
             // 
             this.AcceptButton = this.OK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.Cancel;
-            this.ClientSize = new System.Drawing.Size(209, 153);
+            this.ClientSize = new System.Drawing.Size(209, 176);
+            this.Controls.Add(this.chkReverseBit);
             this.Controls.Add(this.chkSwapDutyCycles);
             this.Controls.Add(this.chkNotResetPhase);
             this.Controls.Add(this.chkLinearMixer);
@@ -154,5 +167,6 @@
 		private System.Windows.Forms.CheckBox chkLinearMixer;
 		private System.Windows.Forms.CheckBox chkNotResetPhase;
 		private System.Windows.Forms.CheckBox chkSwapDutyCycles;
+		private System.Windows.Forms.CheckBox chkReverseBit;
 	}
 }

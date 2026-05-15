@@ -41,6 +41,7 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 			linearMixer = nes.Settings.LinearMixer;
 			notResetPhase = nes.Settings.NotResetPhase;
 			swapDutyCycles = nes.Settings.SwapDutyCycles;
+			reverseBit = nes.Settings.ReverseBit;
 			if (old != null)
 			{
 				m_vol = old.m_vol;
@@ -819,7 +820,7 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 				if (!out_silence)
 				{
 					// apply current sample bit to delta counter
-					if (out_shift.Bit(0))
+					if (out_shift.Bit(apu.reverseBit ? 7 : 0))
 					{
 						if (out_deltacounter < 126)
 							out_deltacounter += 2;
@@ -834,7 +835,8 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 				}
 
 				// The right shift register is clocked.
-				out_shift >>= 1;
+				if (apu.reverseBit) out_shift <<= 1;
+				else out_shift >>= 1;
 
 				// The bits-remaining counter is decremented. If it becomes zero, a new cycle is started.
 				if (out_bits_remaining == 0)
@@ -1032,6 +1034,7 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 		public bool linearMixer;
 		public bool notResetPhase;
 		public bool swapDutyCycles;
+		public bool reverseBit;
 
 		private bool irq_pending;
 		public int dmc_reload_countdown;

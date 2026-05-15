@@ -26,6 +26,7 @@ namespace BizHawk.Client.EmuHawk
 			chkLinearMixer.Checked = d.LinearMixer;
 			chkNotResetPhase.Checked = d.NotResetPhase;
 			chkSwapDutyCycles.Checked = d.SwapDutyCycles;
+			chkReverseBit.Checked = d.ReverseBit;
 		}
 
 		private void NESSoundConfig_Load(object sender, EventArgs e)
@@ -37,6 +38,7 @@ namespace BizHawk.Client.EmuHawk
 			chkLinearMixer.Checked = _settings.LinearMixer;
 			chkNotResetPhase.Checked = _settings.NotResetPhase;
 			chkSwapDutyCycles.Checked = _settings.SwapDutyCycles;
+			chkReverseBit.Checked = _settings.ReverseBit;
 		}
 
 		private void Ok_Click(object sender, EventArgs e)
@@ -73,6 +75,12 @@ namespace BizHawk.Client.EmuHawk
 		private void chkSwapDutyCycles_CheckedChanged(object sender, EventArgs e)
 		{
 			_settings.SwapDutyCycles = chkSwapDutyCycles.Checked;
+			NES.PutSettings(_settings);
+		}
+
+		private void chkReverseBit_CheckedChanged(object sender, EventArgs e)
+		{
+			_settings.ReverseBit = chkReverseBit.Checked;
 			NES.PutSettings(_settings);
 		}
 	}

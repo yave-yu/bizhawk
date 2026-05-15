@@ -34,6 +34,7 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 			apu.linearMixer = Settings.LinearMixer;
 			apu.notResetPhase = Settings.NotResetPhase;
 			apu.swapDutyCycles = Settings.SwapDutyCycles;
+			apu.reverseBit = Settings.ReverseBit;
 
 			return PutSettingsDirtyBits.None;
 		}
@@ -159,6 +160,7 @@ namespace BizHawk.Emulation.Cores.Nintendo.NES
 			public bool LinearMixer = false;
 			public bool NotResetPhase = false;
 			public bool SwapDutyCycles = false;
+			public bool ReverseBit = false;
 
 			public NESSettings Clone()
 			{
