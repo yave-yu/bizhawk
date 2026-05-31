@@ -486,7 +486,7 @@ namespace BizHawk.Client.EmuHawk
 		private void ScreenshotAsMenuItem_Click(object sender, EventArgs e)
 		{
 			var (dir, file) = $"{ScreenshotPrefix()}.{DateTime.Now:yyyy-MM-dd HH.mm.ss}.png".SplitPathToDirAndFile();
-			if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+			_ = Directory.CreateDirectory(dir);
 			var result = this.ShowFileSaveDialog(
 				filter: ScreenshotsFSFilterSet,
 				initDir: dir,
@@ -1552,7 +1552,6 @@ namespace BizHawk.Client.EmuHawk
 
 		private void MainForm_Deactivate(object sender, EventArgs e)
 		{
-			_skipNextAltRelease = true; // Alt+Tab to activate window may result in us seeing an alt release with no corresponding press
 			if (!Config.RunInBackground) MaybePauseFromMenuOpened();
 		}
 

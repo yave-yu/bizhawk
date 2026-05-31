@@ -3,7 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.ComponentModel;
+
 using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk.ToolExtensions;
 using BizHawk.Client.EmuHawk.Properties;
@@ -54,7 +54,17 @@ namespace BizHawk.Client.EmuHawk
 		private bool _shouldMoveGreenArrow;
 		private bool _seekingByEdit;
 
-		private int _seekingTo = -1;
+		private int SeekingTo
+		{
+			get => MainForm.PauseOnFrame ?? -1;
+			set
+			{
+				if (value == -1)
+					MainForm.PauseOnFrame = null;
+				else
+					MainForm.PauseOnFrame = value;
+			}
+		}
 
 		[ConfigPersist]
 		public TAStudioSettings Settings { get; set; } = new TAStudioSettings();
@@ -437,12 +447,10 @@ namespace BizHawk.Client.EmuHawk
 
 		private void SetUpColumns()
 		{
-			_movieSettings.Columns = new RollColumns[_inputRolls.Count];
 			for (int i = 0; i < _inputRolls.Count; i++)
 			{
 				InputRoll roll = _inputRolls[i];
 				MakeDefaultColumns(roll);
-				_movieSettings.Columns[i] = roll.AllColumns;
 				UpdateInputRollDefinition(roll);
 			}
 		}
@@ -698,17 +706,20 @@ namespace BizHawk.Client.EmuHawk
 			_initializing = true;
 
 			movie.ClientSettingsForSave = () =>
-				ConfigService.SaveWithType(_movieSettings);
+			{
+				_movieSettings.Columns = _inputRolls.Select(static r => r.AllColumns).ToArray();
+				return ConfigService.SaveWithType(_movieSettings);
+			};
 			movie.BindMarkersToInput = Settings.BindMarkersToInput;
 			movie.GreenzoneInvalidated = (f) => _ = FrameEdited(f);
 			movie.ChangeLog.MaxSteps = Settings.MaxUndoSteps;
 
-			movie.PropertyChanged += TasMovie_OnPropertyChanged;
+			movie.ChangesChanged += TasMovie_OnChangesChanged;
 			System.Collections.Specialized.NotifyCollectionChangedEventHandler refreshOnMarker = (_, _) => RefreshDialog();
 			movie.Markers.CollectionChanged += refreshOnMarker;
 			this.Disposed += (s, e) =>
 			{
-				movie.PropertyChanged -= TasMovie_OnPropertyChanged;
+				movie.ChangesChanged -= TasMovie_OnChangesChanged;
 				movie.Markers.CollectionChanged -= refreshOnMarker;
 			};
 
@@ -745,7 +756,6 @@ namespace BizHawk.Client.EmuHawk
 						roll.HorizontalOrientation = _movieSettings.HorizontalOrientation = inputRollSettings.HorizontalOrientation;
 						roll.LagFramesToHide = _movieSettings.LagFramesToHide = inputRollSettings.LagFramesToHide;
 						roll.HideWasLagFrames = _movieSettings.HideWasLagFrames = inputRollSettings.HideWasLagFrames;
-						_movieSettings.Columns = [ roll.AllColumns ];
 						UpdateInputRollDefinition(roll);
 					}
 					else if (settings is MovieClientSettings clientSettings)
@@ -1112,7 +1122,7 @@ namespace BizHawk.Client.EmuHawk
 		/// <summary>
 		/// This method is called every time the Changes property is toggled on a <see cref="TasMovie"/> instance.
 		/// </summary>
-		private void TasMovie_OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+		private void TasMovie_OnChangesChanged(object sender, EventArgs e)
 		{
 			UpdateWindowTitle();
 		}

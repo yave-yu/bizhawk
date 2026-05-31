@@ -497,6 +497,7 @@ namespace BizHawk.Client.EmuHawk
 				this,
 				PauseEmulator,
 				SetMainformMovieInfo,
+				(_, _) => UpdateWindowTitle(),
 				() => Sound.PlayWavFile(Properties.Resources.GetNotHawkCallSFX(), Config.SoundVolume / 100f));
 
 			void MainForm_MouseClick(object sender, MouseEventArgs e)
@@ -945,15 +946,19 @@ namespace BizHawk.Client.EmuHawk
 
 				InputManager.ProcessInput(Input.Instance, CheckHotkey, Config, (ie, handled) =>
 				{
-					if (ActiveForm is not FormBase afb) return;
-
 					// Alt key for menu items.
-					if (ie.EventType is InputEventType.Press && (ie.LogicalButton.Modifiers & LogicalButton.MASK_ALT) is not 0U)
+					bool isAltCombination = ie.EventType is InputEventType.Press && (ie.LogicalButton.Modifiers & LogicalButton.MASK_ALT) is not 0U;
+					if (isAltCombination || ie.LogicalButton.Button == Input.BUTTON_FORM_CHANGED)
 					{
 						// Windows will not focus the menu if any other key was pressed while Alt is held. Regardless of whether that key did anything.
+						// And the active form will not be us if the user presed alt+tab.
 						_skipNextAltRelease = true;
-						if (handled) return;
+					}
 
+					if (handled || ActiveForm is not FormBase afb) return;
+
+					if (isAltCombination)
+					{
 						if (ie.LogicalButton.Button.Length == 1)
 						{
 							var c = ie.LogicalButton.Button.ToLowerInvariant()[0];
@@ -964,7 +969,6 @@ namespace BizHawk.Client.EmuHawk
 							afb.SendAltCombination(' ');
 						}
 					}
-					else if (handled) return;
 					else if (ie.EventType is InputEventType.Press && ie.LogicalButton.Button == "Alt")
 					{
 						// We will only do the alt release if the alt press itself was not already handled.
@@ -1117,15 +1121,8 @@ namespace BizHawk.Client.EmuHawk
 
 			set
 			{
-				bool wasTurboSeeking = IsTurboSeeking;
 				_pauseOnFrame = value;
 				SetPauseStatusBarIcon();
-
-				if (wasTurboSeeking && value == null) // TODO: make an Event handler instead, but the logic here is that after turbo seeking, tools will want to do a real update when the emulator finally pauses
-				{
-					// Tools.UpdateToolsBefore(); // TODO: do we need this?
-					Tools.UpdateToolsAfter();
-				}
 			}
 		}
 
@@ -1661,12 +1658,12 @@ namespace BizHawk.Client.EmuHawk
 		public bool RunLibretroCoreChooser()
 		{
 			string initFileName = null;
-			string initDir;
+			string initDir = null;
 			if (Config.LibretroCore is not null)
 			{
 				(initDir, initFileName) = Config.LibretroCore.SplitPathToDirAndFile();
 			}
-			else
+			if (!Directory.Exists(initDir))
 			{
 				initDir = Config.PathEntries.AbsolutePathForType(VSystemID.Raw.Libretro, "Cores");
 				Directory.CreateDirectory(initDir);
@@ -2928,6 +2925,7 @@ namespace BizHawk.Client.EmuHawk
 			{
 				var isFastForwarding = IsFastForwarding;
 				var isFastForwardingOrRewinding = isFastForwarding || isRewinding || Config.Unthrottled;
+				bool atTurboSeekEnd = IsTurboSeeking && Emulator.Frame == PauseOnFrame.Value - 1;
 
 				if (isFastForwardingOrRewinding != _lastFastForwardingOrRewinding)
 				{
@@ -2945,7 +2943,7 @@ namespace BizHawk.Client.EmuHawk
 				InputManager.ClickyVirtualPadController.FrameTick();
 				InputManager.ButtonOverrideAdapter.FrameTick();
 
-				if (IsTurboing)
+				if (IsTurboing && !atTurboSeekEnd)
 				{
 					Tools.FastUpdateBefore();
 				}
@@ -3015,7 +3013,6 @@ namespace BizHawk.Client.EmuHawk
 					atten = 0;
 				}
 
-				bool atTurboSeekEnd = IsTurboSeeking && Emulator.Frame == PauseOnFrame.Value - 1;
 				bool render = !_throttle.skipNextFrame || _currAviWriter?.UsesVideo is true || atTurboSeekEnd;
 				bool newFrame = Emulator.FrameAdvance(InputManager.ControllerOutput, render, renderSound);
 
@@ -3044,17 +3041,13 @@ namespace BizHawk.Client.EmuHawk
 
 				PressFrameAdvance = false;
 
-				// Update tools, but not if we're at the end of a turbo seek. In that case, updating will happen later when the seek is ended.
-				if (!atTurboSeekEnd)
+				if (IsTurboing && !atTurboSeekEnd)
 				{
-					if (IsTurboing)
-					{
-						Tools.FastUpdateAfter();
-					}
-					else
-					{
-						UpdateToolsAfter();
-					}
+					Tools.FastUpdateAfter();
+				}
+				else
+				{
+					UpdateToolsAfter();
 				}
 
 				if (newFrame)
@@ -4503,7 +4496,9 @@ namespace BizHawk.Client.EmuHawk
 
 		private static string SanitiseForFileDialog(string initDir)
 		{
+#pragma warning disable RS0030 // passes the dir on to caller
 			if (initDir.Length is 0 || Directory.Exists(initDir)) return initDir;
+#pragma warning restore RS0030
 #if DEBUG
 			throw new ArgumentException(
 				paramName: nameof(initDir),

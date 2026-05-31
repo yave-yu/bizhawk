@@ -309,8 +309,10 @@ namespace BizHawk.Client.EmuHawk
 			var (dir, file) = item.Path.SplitPathToDirAndFile();
 
 			// prevent error when (auto)loading session referencing scripts in deleted/renamed directories
+#pragma warning disable RS0030 // passes the dir on to `FileSystemWatcher` ctor
 			if (!Directory.Exists(dir))
 				return;
+#pragma warning restore RS0030
 
 			var watcher = new FileSystemWatcher
 			{
@@ -865,7 +867,12 @@ namespace BizHawk.Client.EmuHawk
 			const string TEMPLATE_FILENAME = ".template.lua";
 			var templatePath = Path.Combine(luaDir, TEMPLATE_FILENAME);
 			const string DEF_TEMPLATE_CONTENTS = "-- This template lives at `.../Lua/.template.lua`.\nwhile true do\n\t-- Code here will run once when the script is loaded, then after each emulated frame.\n\temu.frameadvance();\nend\n";
-			if (!File.Exists(templatePath)) File.WriteAllText(path: templatePath, contents: DEF_TEMPLATE_CONTENTS);
+			if (!File.Exists(templatePath))
+			{
+				_ = Directory.CreateDirectory(luaDir);
+				File.WriteAllText(path: templatePath, contents: DEF_TEMPLATE_CONTENTS);
+			}
+
 			if (!Settings.WarnedOnceOnOverwrite && File.Exists(result))
 			{
 				// the user normally gets an "are you sure you want to overwrite" message from the OS
