@@ -119,7 +119,7 @@ namespace BizHawk.Client.EmuHawk
 					DialogController.AddOnScreenMessage("Standard Palette set");
 				}
 
-				return (byte[,])Palettes.QuickNESPalette.Clone();
+				return (byte[,])Palettes.FiveRealityPalette.Clone();
 			}
 
 			// checkbox unchecked: we're reusing whatever palette was set
