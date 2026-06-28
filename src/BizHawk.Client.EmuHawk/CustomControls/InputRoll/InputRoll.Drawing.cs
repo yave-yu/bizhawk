@@ -186,8 +186,13 @@ namespace BizHawk.Client.EmuHawk
 
 			int startRow = firstVisibleRow;
 			int range = Math.Min(lastVisibleRow, RowCount - 1) - startRow + 1;
-			_renderer.PrepDrawString(Font, _foreColor);
 
+			Cell currentCell = new();
+			Cell mouseCell = null;
+			if (ShowColumnTextOnHover && _draggingCell == null && !IsPaintDown)
+			{
+				mouseCell = CurrentCell;
+			}
 			if (HorizontalOrientation)
 			{
 				for (int j = 0; j < visibleColumns.Count; j++)
@@ -199,39 +204,51 @@ namespace BizHawk.Client.EmuHawk
 					{
 						f += _lagFrames[i];
 
-						int baseX = RowsToPixels(i) + (col.Rotatable ? CellWidth : 0);
+						int baseX = RowsToPixels(i);
 						int baseY = col.Left - _vBar.Value;
 
-						if (!col.Rotatable)
+						Bitmap image = null;
+						int bitmapOffsetX = 0;
+						int bitmapOffsetY = 0;
+
+						QueryItemIcon?.Invoke(this, f + startRow, col, ref image, ref bitmapOffsetX, ref bitmapOffsetY);
+
+						if (image != null)
 						{
-							Bitmap image = null;
-							int bitmapOffsetX = 0;
-							int bitmapOffsetY = 0;
-
-							QueryItemIcon?.Invoke(this, f + startRow, col, ref image, ref bitmapOffsetX, ref bitmapOffsetY);
-
-							if (image != null)
-							{
-								int x = baseX + CellWidthPadding + bitmapOffsetX;
-								int y = baseY + CellHeightPadding + bitmapOffsetY;
-								_renderer.DrawBitmap(image, new Point(x, y));
-							}
+							int x = baseX + CellWidthPadding + bitmapOffsetX;
+							int y = baseY + CellHeightPadding + bitmapOffsetY;
+							_renderer.DrawBitmap(image, new Point(x, y));
 						}
 
+						if (col.Rotatable) baseX += CellWidth;
 						int strOffsetX = 0;
 						int strOffsetY = 0;
 						QueryItemText(this, f + startRow, col, out var text, ref strOffsetX, ref strOffsetY);
 
-						int textWidth = (int)_renderer.MeasureString(text, Font).Width;
+						Color? foreColor = QueryItemForeColor?.Invoke(this, f + startRow, col);
+						Font font = Font;
+						currentCell.Column = col;
+						currentCell.RowIndex = f + startRow;
+						if (foreColor == null && _selectedItems.Contains(currentCell))
+						{
+							foreColor = SystemColors.HighlightText;
+						}
+						if (string.IsNullOrEmpty(text) && mouseCell == currentCell)
+						{
+							font = new Font(Font, FontStyle.Regular);
+							foreColor = SystemColors.GrayText;
+							text = col.Text;
+						}
+						_renderer.PrepDrawString(font, foreColor ?? _foreColor, rotate: col.Rotatable);
+
+						int textWidth = (int)_renderer.MeasureString(text, font).Width;
 						if (col.Rotatable)
 						{
 							// Center Text
 							int textX = Math.Max(((colHeight - textWidth) / 2), CellWidthPadding) + strOffsetX;
 							int textY = CellHeightPadding + strOffsetY;
 
-							_renderer.PrepDrawString(Font, _foreColor, rotate: true);
 							DrawString(text, new Rectangle(baseX - textY, baseY + textX, 999, CellHeight));
-							_renderer.PrepDrawString(Font, _foreColor, rotate: false);
 						}
 						else
 						{
@@ -247,7 +264,6 @@ namespace BizHawk.Client.EmuHawk
 			else
 			{
 				int xPadding = CellWidthPadding + 1 - _hBar.Value;
-				var currentCell = new Cell();
 				for (int i = 0, f = 0; f < range; i++, f++) // Vertical
 				{
 					f += _lagFrames[i];
@@ -270,21 +286,23 @@ namespace BizHawk.Client.EmuHawk
 
 						QueryItemText(this, f + startRow, column, out var text, ref strOffsetX, ref strOffsetY);
 
-						bool rePrep = false;
+						Color? foreColor = QueryItemForeColor?.Invoke(this, f + startRow, column);
+						Font font = Font;
 						currentCell.Column = column;
 						currentCell.RowIndex = f + startRow;
-						if (_selectedItems.Contains(currentCell))
+						if (foreColor == null && _selectedItems.Contains(currentCell))
 						{
-							_renderer.PrepDrawString(Font, SystemColors.HighlightText);
-							rePrep = true;
+							foreColor = SystemColors.HighlightText;
+						}
+						if (string.IsNullOrEmpty(text) && mouseCell == currentCell)
+						{
+							font = new Font(Font, FontStyle.Regular);
+							foreColor = SystemColors.GrayText;
+							text = column.Text;
 						}
 
+						_renderer.PrepDrawString(font, foreColor ?? _foreColor);
 						DrawString(text, new Rectangle(point.X + strOffsetX, point.Y + strOffsetY, column.Width, ColumnHeight));
-
-						if (rePrep)
-						{
-							_renderer.PrepDrawString(Font, _foreColor);
-						}
 					}
 				}
 			}

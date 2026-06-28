@@ -106,6 +106,7 @@
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.EditInvisibleColumnsCheckbox = new System.Windows.Forms.CheckBox();
 			this.ScrollSyncCheckbox = new System.Windows.Forms.CheckBox();
+			this.StatesForMarkersCheckbox = new System.Windows.Forms.CheckBox();
 			this.tabControl1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.HideLagNum)).BeginInit();
@@ -380,6 +381,7 @@
 			// 
 			// tabPage4
 			// 
+			this.tabPage4.Controls.Add(this.StatesForMarkersCheckbox);
 			this.tabPage4.Controls.Add(this.label12);
 			this.tabPage4.Controls.Add(this.DefaultManagerSettingsAppliedLabel);
 			this.tabPage4.Controls.Add(this.SetDefaultStateSettingsButton);
@@ -731,6 +733,7 @@
 			// 
 			// tabPage3
 			// 
+			this.tabPage3.Controls.Add(this.StatesForMarkersCheckbox);
 			this.tabPage3.Controls.Add(this.OldBranchesCheckbox);
 			this.tabPage3.Controls.Add(this.BranchDoubleClickCheckbox);
 			this.tabPage3.Controls.Add(this.FastRewindNum);
@@ -912,6 +915,17 @@
 			this.ApplyButton.UseVisualStyleBackColor = true;
 			this.ApplyButton.Click += new System.EventHandler(this.ApplyButton_Click);
 			// 
+			// StatesForMarkersCheckbox
+			// 
+			this.StatesForMarkersCheckbox.AutoSize = true;
+			this.StatesForMarkersCheckbox.Location = new System.Drawing.Point(12, 200);
+			this.StatesForMarkersCheckbox.Name = "StatesForMarkersCheckbox";
+			this.StatesForMarkersCheckbox.Size = new System.Drawing.Size(171, 17);
+			this.StatesForMarkersCheckbox.TabIndex = 518;
+			this.StatesForMarkersCheckbox.Text = "Markers keep states by default";
+			this.toolTip1.SetToolTip(this.StatesForMarkersCheckbox, resources.GetString("StatesForMarkersCheckbox.ToolTip"));
+			this.StatesForMarkersCheckbox.UseVisualStyleBackColor = true;
+			// 
 			// tabPage6
 			// 
 			this.tabPage6.Controls.Add(this.ScrollSyncCheckbox);
@@ -1017,7 +1031,7 @@
 			this.ScrollSpeedNum.Name = "ScrollSpeedNum";
 			this.ScrollSpeedNum.Size = new System.Drawing.Size(67, 20);
 			this.ScrollSpeedNum.TabIndex = 515;
-			this.toolTip1.SetToolTip(this.ScrollSpeedNum, "How many frames to scroll per tick of the mouse wheel.");
+			this.toolTip1.SetToolTip(this.ScrollSpeedNum, "How many frames to scroll per tick of the mouse wheel.\nSet to 0 to use the system default.");
 			// 
 			// label2
 			// 
@@ -1170,5 +1184,6 @@
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.NumericUpDown ScrollSpeedNum;
 		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.CheckBox StatesForMarkersCheckbox;
 	}
 }

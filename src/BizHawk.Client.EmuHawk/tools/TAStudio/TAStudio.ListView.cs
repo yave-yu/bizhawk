@@ -182,6 +182,7 @@ namespace BizHawk.Client.EmuHawk
 				InputPaintingMode = true,
 				LetKeysModifySelection = true,
 				Rotatable = true,
+				ShowColumnTextOnHover = true,
 				// user configurable
 				AlwaysScroll = Settings.FollowCursorAlwaysScroll,
 				Font = Settings.TasViewFont,
@@ -251,11 +252,14 @@ namespace BizHawk.Client.EmuHawk
 					_inputRolls[i].SuspendDrawing();
 					_inputRolls[i].Top = y - _tasViewVBar.Value;
 					_inputRolls[i].Height = _inputRolls[i].TotalColWidth + 1 + _tasViewHBar.Height;
+					_inputRolls[i].Left = _inputRolls[i].Margin.Left;
 
 					y += _inputRolls[i].Height + margin;
 				}
 
 				_tasViewVBar.Visible = y >= _tasViewPanel.Height;
+				_tasViewVBar.SmallChange = 30;
+				_tasViewVBar.LargeChange = _tasViewPanel.Height / 2;
 				_tasViewHBar.Visible = false;
 				InputRoll lastRoll = _inputRolls[_inputRolls.Count - 1];
 				if (!_tasViewVBar.Visible) lastRoll.Height += _tasViewPanel.Height - y;
@@ -290,11 +294,14 @@ namespace BizHawk.Client.EmuHawk
 					_inputRolls[i].SuspendDrawing();
 					_inputRolls[i].Left = x - _tasViewHBar.Value;
 					_inputRolls[i].Width = _inputRolls[i].TotalColWidth + 1 + _tasViewVBar.Width;
+					_inputRolls[i].Top = _inputRolls[i].Margin.Top;
 
 					x += _inputRolls[i].Width + margin;
 				}
 
 				_tasViewHBar.Visible = x >= _tasViewPanel.Width;
+				_tasViewHBar.SmallChange = 30;
+				_tasViewHBar.LargeChange = _tasViewPanel.Width / 2;
 				_tasViewVBar.Visible = false;
 				InputRoll lastRoll = _inputRolls[_inputRolls.Count - 1];
 				if (!_tasViewHBar.Visible) lastRoll.Width += _tasViewPanel.Width - x;
@@ -384,7 +391,7 @@ namespace BizHawk.Client.EmuHawk
 			}
 			else if (columnName == FrameColumnName)
 			{
-				offsetX = -3;
+				offsetX = sender.HorizontalOrientation ? -2 : -3;
 				offsetY = 1;
 
 				if (Settings.DenoteMarkersWithIcons && CurrentTasMovie.Markers.IsMarker(index))
@@ -761,10 +768,6 @@ namespace BizHawk.Client.EmuHawk
 				_activeInputRoll = roll;
 				UpdateActiveMovieInputs();
 			}
-
-			// only on mouse button down, check that the pointed to cell is the correct one (can be wrong due to scroll while playing)
-			roll._programmaticallyChangingRow = true;
-			roll.PointMouseToNewCell();
 
 			if (e.Button == MouseButtons.Middle)
 			{
@@ -1276,12 +1279,7 @@ namespace BizHawk.Client.EmuHawk
 			InputRoll roll = (InputRoll)sender;
 			toolTip1.SetToolTip(roll, null);
 
-			if (e.NewCell.RowIndex is null)
-			{
-				return;
-			}
-
-			if (!MouseButtonHeld)
+			if (e.NewCell.RowIndex is null || !MouseButtonHeld)
 			{
 				return;
 			}
@@ -1345,7 +1343,9 @@ namespace BizHawk.Client.EmuHawk
 
 			if (MouseButtonHeld)
 			{
-				roll.MakeIndexVisible(roll.CurrentCell.RowIndex.Value); // todo: limit scrolling speed
+				roll.SuppressCellChange = true; // avoid inifinite recursion of scrolling cuasing PointedCellChanged
+				roll.MakeIndexVisible(roll.CurrentCell.RowIndex.Value);
+				roll.SuppressCellChange = false;
 				SetTasViewRowCount(); // refreshes
 			}
 		}

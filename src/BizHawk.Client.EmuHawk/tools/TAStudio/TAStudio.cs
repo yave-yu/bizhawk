@@ -143,6 +143,7 @@ namespace BizHawk.Client.EmuHawk
 			public int RewindStep { get; set; } = 1;
 			public int RewindStepFast { get; set; } = 4;
 			public bool ScrollSync { get; set; } = true;
+			public bool StatesForMarkers { get; set; } = true;
 			public PatternPaintModeEnum PatternPaintMode { get; set; } = TAStudioSettings.PatternPaintModeEnum.Never;
 			public PatternSelectionEnum PatternSelection { get; set; } = TAStudioSettings.PatternSelectionEnum.Hold;
 			public Font TasViewFont { get; set; } = new Font("Arial", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -180,6 +181,9 @@ namespace BizHawk.Client.EmuHawk
 				// workaround for https://github.com/mono/mono/issues/12644
 				ColumnRightClickMenu.Items.Insert(0, new ToolStripMenuItemEx { Text = "(Dismiss Menu)" }); // don't even need to attach any behaviour, since clicking anything will dismiss the menu first
 				ColumnRightClickMenu.Items.Insert(1, new ToolStripSeparatorEx());
+
+				// see https://github.com/TASEmulators/BizHawk/issues/4779#issuecomment-4800440717
+				this.Shown += (_, _) => RepositionRolls();
 			}
 			_tasViewPanel = MainVertialSplit.Panel1;
 			// The built-in scroll feature of .NET's scrollable controls is non-functional. So, custom scroll behavior!
@@ -189,24 +193,6 @@ namespace BizHawk.Client.EmuHawk
 			_tasViewVBar.Scroll += (_, _) => RepositionRolls();
 			_tasViewPanel.Controls.Add(_tasViewHBar);
 			_tasViewPanel.Controls.Add(_tasViewVBar);
-
-			ToolStripMenuItemEx goToFrameMenuItem = new()
-			{
-				ShortcutKeys = Keys.Control | Keys.G,
-				Text = "Go to Frame...",
-			};
-			goToFrameMenuItem.Click += (_, _) =>
-			{
-				MainForm.PauseEmulator();
-				using InputPrompt dialog = new()
-				{
-					Text = "Go to Frame",
-					Message = "Jump/Seek to frame index:",
-					TextInputType = InputPrompt.InputType.Unsigned,
-				};
-				if (this.ShowDialogWithTempMute(dialog).IsOk()) GoToFrame(int.Parse(dialog.PromptText));
-			};
-			_ = EditSubMenu.DropDownItems.InsertAfter(ReselectClipboardMenuItem, insert: goToFrameMenuItem);
 
 			RecentSubMenu.Image = Resources.Recent;
 			recentMacrosToolStripMenuItem.Image = Resources.Recent;
@@ -261,6 +247,7 @@ namespace BizHawk.Client.EmuHawk
 			SelectBetweenMarkersMenuItem.ShortcutKeyDisplayString = Config.HotkeyBindings["Sel. bet. Markers"];
 			SelectAllMenuItem.ShortcutKeyDisplayString = Config.HotkeyBindings["Select All"];
 			ReselectClipboardMenuItem.ShortcutKeyDisplayString = Config.HotkeyBindings["Reselect Clip."];
+			GoToFrameMenuItem.ShortcutKeyDisplayString = Config.HotkeyBindings["Seek To..."];
 			ClearFramesMenuItem.ShortcutKeyDisplayString = Config.HotkeyBindings["Clear Frames"];
 			DeleteFramesMenuItem.ShortcutKeyDisplayString = Config.HotkeyBindings["Delete Frames"];
 			InsertFrameMenuItem.ShortcutKeyDisplayString = Config.HotkeyBindings["Insert Frame"];
@@ -275,6 +262,7 @@ namespace BizHawk.Client.EmuHawk
 			InsertNumFramesContextMenuItem.ShortcutKeyDisplayString = Config.HotkeyBindings["Insert # Frames"];
 			CloneContextMenuItem.ShortcutKeyDisplayString = Config.HotkeyBindings["Clone Frames"];
 			CloneXTimesContextMenuItem.ShortcutKeyDisplayString = Config.HotkeyBindings["Clone # Times"];
+			PasteInsertMenuItem.ShortcutKeyDisplayString = Config.HotkeyBindings["Paste Insert"];
 
 			TasPlaybackBox.UpdateHotkeyTooltips(Config);
 			BookMarkControl.UpdateHotkeyTooltips(Config);
@@ -602,6 +590,8 @@ namespace BizHawk.Client.EmuHawk
 		public void CloneFramesXTimesExternal()
 			=> CloneFramesXTimesMenuItem_Click(null, EventArgs.Empty);
 
+		public void PasteInsertExternal() => MaybePasteFromClipboard(overwriteSelection: false);
+
 		public void UndoExternal()
 			=> UndoMenuItem_Click(null, EventArgs.Empty);
 
@@ -624,6 +614,14 @@ namespace BizHawk.Client.EmuHawk
 
 			RefreshDialog();
 		}
+
+		public void SeekToSelectedFrame()
+		{
+			if (!AnyRowsSelected) return;
+			GoToFrame(FirstSelectedRowIndex);
+		}
+
+		public void SeekToUserSpecifiedFrame() => GoToFrameMenuItem_Click(null, EventArgs.Empty);
 
 		public IMovieController GetBranchInput(string branchId, int frame)
 		{
@@ -1081,8 +1079,17 @@ namespace BizHawk.Client.EmuHawk
 
 		public override void OnPauseToggle(bool newPauseState)
 		{
-			// On pause, interrupt merging of recorded frames.
-			if (newPauseState) _lastRecordAction = -1;
+			if (newPauseState)
+			{
+				// On pause, interrupt merging of recorded frames.
+				_lastRecordAction = -1;
+
+				if (TasPlaybackBox.TurboSeek && SeekingTo != -1)
+				{
+					SetTasViewRowCount(); // so follow cursor works
+					UpdateAfter();
+				}
+			}
 		}
 
 		private void SetSplicer()
@@ -1304,6 +1311,11 @@ namespace BizHawk.Client.EmuHawk
 				{
 					rollColumn.Width = rollColumn.VerticalWidth;
 				}
+			}
+
+			foreach (InputRoll roll2 in _inputRolls)
+			{
+				roll2.HorizontalOrientation = roll.HorizontalOrientation;
 			}
 
 			roll.AllColumns.ColumnsChanged();
